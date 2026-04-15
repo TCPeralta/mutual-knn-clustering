@@ -1,3 +1,5 @@
+from distancias import matrDist
+
 def k_vizinhos(matrix, k):
     tdsVizinhos = []
     for i in range(len(matrix)):
@@ -58,15 +60,24 @@ def clusterBSF(matrix):
             clusters.append(grupoAtual)
     return clusters
 
-matriz_teste = [
-        [0, 1, 1, 0, 0],
-        [1, 0, 1, 0, 0],
-        [1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 1],
-        [0, 0, 0, 1, 0]]
+def executarMKNN(pontos, k):
+    matrizDist = matrDist(pontos)
+    favoritos = k_vizinhos(matrizDist,k)
+    matrAcordo = acordoMutuo(favoritos)
+    clusters = clusterBSF(matrAcordo)
+    return clusters
 
-resultado_clusters = clusterBSF(matriz_teste)
-
-print("--- RESULTADO DO AGRUPAMENTO ---")
-for i in range(len(resultado_clusters)):
-    print(f"Cluster {i+1}: {resultado_clusters[i]}")
+if __name__ == "__main__":
+    # Coordenadas simulando dois agrupamentos distantes
+    dados_brutos = [
+        [0, 1], [1, 0], [0, 0], [1, 1],  # Grupo 1
+        [10, 10], [10, 11], [11, 10]     # Grupo 2
+    ]
+    
+    parametro_k = 2
+    
+    resultado_final = executarMKNN(dados_brutos, parametro_k)
+    
+    print("--- RESULTADO FINAL DO ALGORITMO MKNN ---")
+    for i in range(len(resultado_final)):
+        print(f"Cluster {i+1} contém os pontos de índice: {resultado_final[i]}")
