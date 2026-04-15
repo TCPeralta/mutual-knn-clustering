@@ -35,3 +35,38 @@ def acordoMutuo(favoritos):
                 matrix[i][j] = 1
     return matrix
 
+def clusterBSF(matrix):
+    n = len(matrix)
+    visitados = []
+    for x in range(n):
+        visitados.append(0)
+    clusters = []
+    for i in range(n):
+        if(visitados[i] == 0):
+            grupoAtual = []
+            fila = [i]
+            visitados[i] = 1
+            while fila:
+                ponto = fila[0]
+                fila.pop(0)
+                grupoAtual.append(ponto)
+                linhaMatr = matrix[ponto]
+                for j in range(len(linhaMatr)):
+                    if (linhaMatr[j] == 1 and visitados[j]==0):
+                        fila.append(j)
+                        visitados[j] = 1
+            clusters.append(grupoAtual)
+    return clusters
+
+matriz_teste = [
+        [0, 1, 1, 0, 0],
+        [1, 0, 1, 0, 0],
+        [1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 0]]
+
+resultado_clusters = clusterBSF(matriz_teste)
+
+print("--- RESULTADO DO AGRUPAMENTO ---")
+for i in range(len(resultado_clusters)):
+    print(f"Cluster {i+1}: {resultado_clusters[i]}")
